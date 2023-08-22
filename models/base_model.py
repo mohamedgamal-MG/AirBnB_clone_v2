@@ -2,10 +2,12 @@
 """
 A module that implements the BaseModel class
 """
-
+from sqlalchemy.ext.declarative import declarative_base
 from uuid import uuid4
 from datetime import datetime
+from sqlalchemy import Column, Integer, String, DateTime
 
+Base = declarative_base()
 
 class BaseModel:
     """
@@ -46,6 +48,7 @@ class BaseModel:
         from models import storage
         self.updated_at = datetime.now()
         storage.save()
+        models.storage.new(self)
 
     def to_dict(self):
         """
@@ -64,3 +67,7 @@ class BaseModel:
                 v = self.__dict__[k].isoformat()
                 dict_1[k] = v
         return dict_1
+    def delete(self):
+        """ delete object
+        """
+        models.storage.delete(self)

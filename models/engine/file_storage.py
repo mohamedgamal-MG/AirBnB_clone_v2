@@ -14,6 +14,7 @@ from models.city import City
 from models.place import Place
 from models.review import Review
 
+import shlex
 
 class FileStorage:
     """
@@ -24,11 +25,21 @@ class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
-    def all(self):
+    def all(self, cls=None):
         """
         Returns the dictionary __objects
         """
-        return self.__objects
+          dic = {}
+        if cls:
+            dictionary = self.__objects
+            for key in dictionary:
+                partition = key.replace('.', ' ')
+                partition = shlex.split(partition)
+                if (partition[0] == cls.__name__):
+                    dic[key] = self.__objects[key]
+            return (dic)
+        else:
+            return self.__objects
 
     def new(self, obj):
         """
@@ -57,8 +68,14 @@ class FileStorage:
                     self.new(eval(obj["__class__"])(**obj))
         except FileNotFoundError:
             return
-    def reset(self):
+    def delete(self, obj=None):
+        """ delete an existing element
         """
-        Deletes all objects from __objects
+        if obj:
+            key = "{}.{}".format(type(obj).__name__, obj.id)
+            del self.__objects[key]
+    
+    def close(self):
+        """ calls reload()
         """
-        self.__objects = {}
+        self.reload()
