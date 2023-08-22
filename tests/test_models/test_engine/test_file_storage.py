@@ -76,7 +76,18 @@ class TestFileStorage(unittest.TestCase):
         self.assertIn("City.{}".format(city.id), all_objects)
         self.assertIn("Place.{}".format(place.id), all_objects)
         self.assertIn("Review.{}".format(review.id), all_objects)
+ def test_instances(self):
+        """chequeamos instantation"""
+        obj = FileStorage()
+        self.assertIsInstance(obj, FileStorage)
+ def test_docs(self):
+        """Test docstrings"""
+        self.assertIsNotNone(FileStorage.all)
+        self.assertIsNotNone(FileStorage.new)
+        self.assertIsNotNone(FileStorage.save)
+        self.assertIsNotNone(FileStorage.reload)
 
+    
 if __name__ == "__main__":
     unittest.main()
 
